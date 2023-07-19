@@ -1,0 +1,34 @@
+#A powershell script to move files into an a folder and create an archive. 
+
+# Set source directory path
+$sourceDir = "C:\PathToSource\"
+$filesToArchive = Get-ChildItem -Path $sourceDir -File
+
+# Generate a timestamp for the archive
+$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+
+# Set the destination archive path with the appended timestamp
+$destArchivePath = "X:\PathToDestination\Archive_$timestamp.zip"
+
+# Set 7-Zip executable path
+$sevenZipPath = "C:\Program Files\7-Zip\7z.exe"
+
+# Set log file path
+$logFile = "C:\Temp\Logs\file_$timestamp.log"
+
+# Start logging
+Start-Transcript -Path $logFile
+
+try {
+	# Create the archive using 7-Zip
+	& $sevenZipPath "a" "-tzip" $destArchivePath $filesToArchive.FullName
+
+	Write-Host "Files archived and transferred successfully."
+    	Write-Output "Files archived and transferred successfully."
+}
+catch { 
+	  Write-Host "An error occurred: $_"
+    	Write-Output "An error occurred: $_"
+}
+# Stop logging
+Stop-Transcript
